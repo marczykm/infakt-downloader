@@ -1,13 +1,16 @@
 import logging
 import coloredlogs
 
-import infaktApiClient
+from infaktApiClient import InfaktApiClient
 
 coloredlogs.install(level="INFO")
 log = logging.getLogger("Main")
 
-infakt = infaktApiClient.InfaktApiClient()
+infakt = InfaktApiClient()
 
-invoice = infakt.findInvoice(52055856)
+invoices = infakt.listInvoices()
+
+log.info('Invoices: %s', invoices)
+log.info(len(invoices))
 
 log.info('OK')
