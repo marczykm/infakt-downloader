@@ -37,6 +37,25 @@ class InfaktApiClient:
         headers = {'X-inFakt-ApiKey': self.config['infakt']['x-api-key']}
         return headers
 
+    def listInvoices(self):
+        invoices = []
+        response = requests.get(self.INFAKT_API_URL + "invoices.json?offset=0&limit=100", headers=self._prepareHeaders())
+        log.info('Status code: %s', response.status_code)
+        rawjson = response.json()
+        entites_json = rawjson['entities']
+        for invoice_raw in entites_json:
+            invoice = Invoice(invoice_raw)
+            invoices.append(invoice)
+        while rawjson['metainfo']['count'] != 0:
+            url = rawjson['metainfo']['next']
+            response = requests.get(url, headers=self._prepareHeaders())
+            rawjson = response.json()
+            entites_json = rawjson['entities']
+            for invoice_raw in entites_json:
+                invoice = Invoice(invoice_raw)
+                invoices.append(invoice)
+        return invoices
+
     def findInvoice(self, invoiceNum):
         response = requests.get(self.INFAKT_API_URL + "invoices/" + str(invoiceNum) + ".json", headers=self._prepareHeaders())
         log.info('Status code: %s', response.status_code)
