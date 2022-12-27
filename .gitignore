@@ -1,4 +1,6 @@
 infakt-api-client.yaml
 
+*.pdf
+
 __pycache__/
 *.pyc

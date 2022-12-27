@@ -63,9 +63,11 @@ class InfaktApiClient:
         log.info(invoice)
         return invoice
 
-    def generatePdf(self, invoiceNum):
+    def generatePdf(self, invoiceNum, folderPath = '.'):
         response = requests.get(self.INFAKT_API_URL + "/invoices/" + str(invoiceNum) + "/pdf.json?document_type=original&locale=pe", headers=self._prepareHeaders())
-        fileName = str(invoiceNum)+".pdf"
+        fileName = folderPath + '/' + str(invoiceNum)+".pdf"
+        if not os.path.exists(folderPath):
+            os.mkdir(folderPath)
         with open(fileName, 'wb') as fd:
             for chunk in response.iter_content(chunk_size=128):
                 fd.write(chunk)
