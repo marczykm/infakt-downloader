@@ -1,0 +1,4 @@
+infakt-api-client.yaml
+
+__pycache__/
+*.pyc
